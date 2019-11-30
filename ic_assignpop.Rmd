@@ -1,0 +1,176 @@
+---
+title: "ic_assignpop"
+author: "Ishrat Chowdhury"
+date: "November 29, 2019"
+output: html_document
+---
+
+#Introduction to module
+
+Welcome to the AssignPOP module! In this module we will first explain the concept of cross validation. We will walk through a rudementary exaple of it and explain two methods of cross validation. Then we will walk you through using the AssignPop package to do cross validation with non-genetic data and genetic data.
+
+
+#Intro to package
+
+AssignPOP is a module that was created for population assigment using a machine leanring framework. Assignpop uses cross validation methods, Monte Carlo and K-fold to estimate assignment accuracy, and membership probability. 
+
+#First what is cross validation? 
+
+Cross validation is a way of ensuring that the model being used has accurate predictive power. It does this by creating a holdout sample (a portion of the dataset, also called test set) to set aside. The rest of the data is then "trained" or put through tests compared to the holdout sample. The prediction errors from each of these tests is averaged to determine the ultimate prediction error of the model. 
+
+This is useful if the sample size is very small. Instead of taking a sizeable portion of the data to validate and applying that model to the rest of the data, cross validation allows us to take multiple portions of a  small set of data, and apply models to it.
+
+The debate with cross validation is what portion of the data should the holdout sample be composed off? It is important that this holdout sample is homogenious and represetnative of the dataset. We will be going over the K-fold and Monte Carlo cross validation methods.
+
+#K-fold 
+
+The K-fold method divides the data set into k samples. One of these samples is used as a holdout sample. The rest is then trained. Then the next sample is used as the holdout sample while the remaining is trained. This is done until all the data is trained. This is one of the benefits of k-fold cross validation. it is also very useful for small datasets. However as a result of this sequential order the holdback samples are all dependant on each other. The Monte Carlo method avoids this.
+
+```{r, echo=FALSE}
+url <- "https://i.stack.imgur.com/FKKvG.png"
+```
+
+<center><img src="`r url`"></center>
+
+Now we will walk through a simple example of doing this. First let's load some data. We will be using a made up data set of Turtle measurements. The Turtle ID and population were from a public dataset but the measurments were all made up. There are a total of 9 populations with a different number of individuals, followed by 4 different measurments. 
+
+```{r}
+#Import morphometric data containing sample IDs and features
+#Must be saved in working directory, you can find the file in our Github repository
+morphdf <- read.csv( "Turtle_data_01.csv", header=TRUE ) 
+
+#Create a string vector for population label (define the name of the population and the number of individuals in each)
+pop_label <- c( rep("BM", 46), rep("BN", 6), rep("ITCS", 46), rep("SICO", 42), rep("SP", 12), rep("CROA", 4), rep("FR", 87), rep("GR", 77), rep("MAC", 10) ) 
+
+#Add the pop_label to the last column; 'morphdf_pop' is a data frame with population label in the last column
+morphdf_pop <- cbind(morphdf, pop_label)
+
+#Handling numeric population name
+#A set of population names: BM, BN, ITCS...
+pop_label <- c( rep("BM", 46), rep("BN", 6), rep("ITCS", 46), rep("SICO", 42), rep("SP", 12), rep("CROA", 4), rep("FR", 87), rep("GR", 77), rep("MAC", 10) ) 
+
+#Add the pop_label
+morphdf_pop <- cbind(morphdf, pop_label)
+
+#Convert population name to factor data type 
+morphdf_pop$pop_label <- as.factor(morphdf_pop$pop_label)
+```
+ 
+Now that we have morph data loaded, let's try some simple cross validation.
+
+```{r}
+#Randomly shuffle the data
+yourData<-morphdf_pop[sample(nrow(morphdf_pop)),]
+
+#Create 3 equally size folds
+folds <- cut(seq(1,nrow(yourData)),breaks=3,labels=FALSE)
+
+#Perform 3 fold cross validation
+for(i in 1:3){
+    #Segement your data by fold using the which() function 
+    testIndexes <- which(folds==i,arr.ind=TRUE)
+    testData <- yourData[testIndexes, ]
+    trainData <- yourData[-testIndexes, ]}
+```
+
+Now we have a test set and a training set. We can start by doing a linear regression of turtle height to weight for the the test set and comparing thr R squared value to that of the training set. 
+
+```{r}
+m_test<- lm(Height ~ Weight, data=testData)
+summary(m_test)
+m_train<- lm(Height ~ Weight, data=trainData)
+summary(m_train)
+```
+
+Here we see the R squared value for the test data is 0.5981 and for the training data is 0.6424. This is pretty close, but we would have to do this 2 more times with a new test set and then eventually compile all the percent errors to determine the accuracy of the model. This can get really, complicated so we will use AssignPop to do the rest.
+
+#Monte Carlo 
+
+The Monte Carlo method composes the holdback sample by taking random points from the data. This means some points can be repeated, however some may never be selected. It also means that every time this is run there maybe sligthly different results. We will aslo be doing this analysis with AssignPop.
+
+Now let's use AssignPop!
+
+First lets load the packages.
+```{r}
+library(assignPOP)
+library(klaR)
+```
+
+```{r}
+#Perform K-fold cross-validation 
+assign.kfold(morphdf_pop, k.fold=3, 
+             model="svm", dir="morphResultFolder_KF/") 
+
+#k.fold tells the funciton how many times to split the data; you can list a few numbers here to make it run multip tests
+```
+
+```{r}
+#Make membership probability plot
+membership.plot(dir="morphResultFolder_KF/")
+```
+
+```{r}
+#Perform Monte-Carlo cross-validation, with using subsets of high Fst loci as training loci, LDA to build predictive models
+assign.MC(morphdf_pop, train.inds=c(0.33),
+          iterations=3, model="svm", dir="morphResultFolder_MC/")
+
+#train.inds is telling you how to define the holdout sample; can be proportion or integer; an integer tells you how many samples to use in the holdout smaple; a proportion will give you a proportion of samples to put in the holdout sample; listing a few numbers will allow you to make multiple holdout samples
+#interations tells you have many tests to run
+```
+
+```{r}
+#Calculate assignment accuracy
+morph_accuRes_MC <- accuracy.MC(dir="morphResultFolder_MC/")
+```
+
+```{r}
+#Make assignment accuracy boxplot
+accuracy.plot(morph_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
+```
+
+Now lets load our genomic data. This genomic data is the publuc dataset used to get the ID and population form our madeup  morphometric dataset. It is in the GENEPOP format, but you can also import from the STRUCTURE format using the complementary function. The path defined is from the public repository we made for this class. Note that the following code might take a few minutes to run.
+
+```{r}
+YourGenepop <- read.Genepop( "https://raw.githubusercontent.com/cavega36/AssignPopModule/master/Turtle_data.txt", pop.names=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"), haploid = FALSE)
+```
+
+That looks good! We now have genetic data loaded.
+
+We can also remove low variance loci with the following code (optional).
+
+```{r}
+YourGenepop_rd <- reduce.allele( YourGenepop, p = 0.95)
+```
+
+```{r}
+#Perform K-fold cross-validation 
+assign.kfold(YourGenepop_rd, k.fold=3, train.loci=c(1), loci.sample="fst",
+             model="svm", dir="genResultFolder_KF/") 
+
+#train.loci will allow you to specific the proportion of of loci to use as a training set
+#loci.sample is telling you to pick a random set of the 33%
+```
+
+```{r}
+#Make membership probability plot
+membership.plot(dir="genResultFolder_KF/")
+```
+
+```{r}
+#Perform Monte-Carlo cross-validation, with using subsets of high Fst loci as training loci, LDA to build predictive models
+assign.MC(YourGenepop_rd, train.inds=c(0.33), train.loci=c(1), loci.sample="fst",
+          iterations=3, model="svm", dir="genResultFolder_MC/")
+```
+
+```{r}
+#Calculate assignment accuracy
+gen_accuRes_MC <- accuracy.MC(dir="genResultFolder_MC/")
+```
+
+```{r}
+#Make assignment accuracy boxplot
+accuracy.plot(gen_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
+```
+
+
+
