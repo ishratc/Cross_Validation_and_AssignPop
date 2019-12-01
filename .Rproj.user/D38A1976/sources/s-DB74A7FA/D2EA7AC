@@ -1,0 +1,27 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575214867897.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "891463328",
+    "id" : "D2EA7AC",
+    "lastKnownWriteTime" : 1575219847,
+    "last_content_update" : 1575219847960,
+    "path" : "~/Documents/School Stuff/Fall 2019/AN597/GitHub Repositories/icassignpop/ic_assignpop.Rmd",
+    "project_path" : "ic_assignpop.Rmd",
+    "properties" : {
+        "cursorPosition" : "116,0",
+        "docOutlineSize" : "28",
+        "docOutlineVisible" : "1",
+        "scrollLine" : "116"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
