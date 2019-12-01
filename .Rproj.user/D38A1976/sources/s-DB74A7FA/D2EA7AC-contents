@@ -130,7 +130,7 @@ assign.MC(morphdf_pop, train.inds=c(0.33),
 morph_accuRes_MC <- accuracy.MC(dir="morphResultFolder_MC/")
 ```
 
-```{r}
+```{r, fig.cap="Figure 2: Assignment Accuracy Boxplot"}
 #Make assignment accuracy boxplot
 accuracy.plot(morph_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
 ```
@@ -158,7 +158,7 @@ assign.kfold(YourGenepop_rd, k.fold=3, train.loci=c(1), loci.sample="fst",
 #loci.sample is telling you to pick a random set of the 33%
 ```
 
-```{r}
+```{r, fig.cap="Figure 3: Membership Probability Plot"}
 #Make membership probability plot
 membership.plot(dir="genResultFolder_KF/")
 ```
@@ -174,7 +174,7 @@ assign.MC(YourGenepop_rd, train.inds=c(0.33), train.loci=c(1), loci.sample="fst"
 gen_accuRes_MC <- accuracy.MC(dir="genResultFolder_MC/")
 ```
 
-```{r}
+```{r, fig.cap="Figure 4: Assignment Accuracy Boxplot"}
 #Make assignment accuracy boxplot
 accuracy.plot(gen_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
 ```
