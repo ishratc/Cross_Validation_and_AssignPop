@@ -1,0 +1,4 @@
+"0",""
+"0","#You will told that only one proportion of training loci is found, which is the morphometric data. You will be prompted to type ""Y"" or ""N"" in response to whether there is any genetic data. There is none, so type ""N""!"
+"0",""
+"0","#Next you will have to choose between one of the four output styles. Each is explained in the prompt in your console. We recommend running all four to see the differences in the types of visualization you can have! For now, type ""3"" for the ""Seperated by fold"" option."

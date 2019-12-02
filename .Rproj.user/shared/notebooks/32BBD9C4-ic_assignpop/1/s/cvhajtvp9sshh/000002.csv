@@ -1,0 +1,2 @@
+"0","#Make assignment accuracy boxplot, making sure to properly assign our populations. "
+"0","accuracy.plot(gen_accuRes_MC, pop=c(""BM"", ""BN"", ""ITCS"", ""SICO"", ""SP"", ""CROA"", ""FR"", ""GR"", ""MAC""))"

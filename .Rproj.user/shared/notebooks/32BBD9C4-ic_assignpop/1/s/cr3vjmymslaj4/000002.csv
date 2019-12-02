@@ -1,0 +1,8 @@
+"0","#Calculate assignment accuracy"
+"0","gen_accuRes_MC <- accuracy.MC(dir=""genResultFolder_MC/"")"
+"1","
+  Correct assignment rates were estimated!!"
+"1","
+  A total of 3 assignment tests for 9 pops."
+"1","
+  Results were also saved in a 'Rate_of_3_tests_9_pops.txt' file in the directory."

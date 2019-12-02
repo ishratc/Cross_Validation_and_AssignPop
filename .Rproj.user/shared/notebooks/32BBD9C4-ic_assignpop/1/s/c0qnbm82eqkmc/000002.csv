@@ -1,5 +1,5 @@
 "0","#Make membership probability plot"
-"0","membership.plot(dir=""morphResultFolder_KF/"")"
+"0","membership.plot(dir=""genResultFolder_KF/"")"
 "1","
   Only one proportion of training loci is found."
 "0","y"
@@ -13,4 +13,4 @@
   [3] Separated by fold (Individuals of different folds are in separate plots)"
 "1","
   [4] Separated and Sorted (Individuals are separated by fold and sorted by probability)"
-"0","1"
+"0","3"

@@ -1,0 +1,7 @@
+"0","#Installing and loading the package with another needed package, ""klaR""."
+"0",""
+"0","library(assignPOP) "
+"0",""
+"0","library(klaR)"
+"2","Loading required package: MASS
+"

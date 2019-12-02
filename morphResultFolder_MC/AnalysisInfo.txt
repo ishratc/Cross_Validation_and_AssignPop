@@ -1,7 +1,8 @@
  Analysis Description ( R - assignPOP ver. 1.1.7 )
- Perform assign.kfold() @ 2019-12-02 10:13:03 
+ Perform assign.MC() @ 2019-12-02 10:15:28 
 
- k.fold = 3 
+ train.inds = 0.33 
+ iterations = 3 
  Total assignment tests = 3 
  Data scaled and centerd: FALSE 
  PCA for dimensionality reduction: TRUE 

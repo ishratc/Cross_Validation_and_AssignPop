@@ -1,0 +1,3 @@
+"0","#Make assignment accuracy boxplot"
+"0",""
+"0","accuracy.plot(morph_accuRes_MC, pop=c(""BM"", ""BN"", ""ITCS"", ""SICO"", ""SP"", ""CROA"", ""FR"", ""GR"", ""MAC""))"

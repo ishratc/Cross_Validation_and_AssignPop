@@ -12,7 +12,7 @@ output:
 
 # Introduction to the module
 
-Welcome to the AssignPOP module! In this module we will first explain the concept of cross validation. We will walk through a rudementary exaple of it and explain two methods of cross validation. Then we will walk you through using the AssignPop package to do cross validation with non-genetic data and genetic data.
+Welcome to the `r assignPOP` module! In this module we will first explain the concept of cross validation. We will walk through a rudimentary example of it and explain two methods of cross validation. Then we will walk you through using the `r assignPOP` package to do cross validation with non-genetic data and genetic data.
 <br><br>
 # Introduction to the package
 
@@ -21,10 +21,8 @@ Welcome to the AssignPOP module! In this module we will first explain the concep
 ```{r}
 #Installing and loading the package with another needed package, "klaR".
 
-install.packages("assignPOP")
 library(assignPOP) 
 
-install.packages("klaR")
 library(klaR)
 ``` 
 
@@ -89,7 +87,7 @@ for(i in 1:3){
     trainData <- yourData[-testIndexes, ]}
 ```
 
-Now we have a test set and a training set. We can start by doing a linear regression of turtle height to weight for the the test set and comparing the R-squared value to that of the training set. 
+Now we have a test set and a training set. We can start by doing a linear regression of turtle height to weight for the test set and compare the R-squared value to that of the training set. 
 
 ```{r}
 m_test<- lm(Height ~ Weight, data=testData)
@@ -120,7 +118,7 @@ assign.kfold(morphdf_pop, k.fold=3,
 #You will also be prompted to make sure that your headers are correctly assigned as their type of data. For our data, all our columns are integers. Type "Y" if they all say "integer"!
 ```
 
-The K-fold is now done, with three assignment tests conplete! The data has been sent to a folder called "morphResultFolder_KF". We can now visualize our data with a membership probabiltiy plot.
+The K-fold is now done, with three assignment tests complete! The data has been sent to a folder called "morphResultFolder_KF". We can now visualize our data with a membership probability plot.
 
 ```{r, fig.cap="Figure 1: Membership Probability Plot"}
 #Make membership probability plot
@@ -133,7 +131,7 @@ membership.plot(dir="morphResultFolder_KF/")
 
 ***INCLUDE PLOTS, STARTING WITH 4 AND THEN SHOW THE OTHERS. ALSO INCLUDE EXPLANATIONS***
 
-Now we can run the Monte-Carlo for the morhpometric data.
+Now we can run the Monte-Carlo for the morphometric data.
 
 ```{r}
 #Perform Monte-Carlo cross-validation, with using subsets of high Fst loci as training loci, LDA to build predictive models
@@ -160,12 +158,13 @@ The Monte-Carlo is now done, and three assignment tests have been completed. We 
 morph_accuRes_MC <- accuracy.MC(dir="morphResultFolder_MC/")
 ```
 
-As said in the console, the results of the test were saved as a text file in the directory inside of the "morphResultFlder_MC". We can read this into R using the function "read.table()". Notice that the file has been inputted into the folder and not straight into the directory, since yours might have a unique name. This means you will have to change the name of the "YOUR FILE ROUTE HERE" to match your file's directory route.  
+As said in the console, the results of the test were saved as a text file in the directory inside of the "morphResultFlder_MC". We can read this into R using the function "read.table()". Notice that the file has been input into the folder and not straight into the directory, since yours might have a unique name. This means you will have to change the name of the "YOUR FILE ROUTE HERE" to match your file's directory route.  
 
 ```{r, eval = FALSE}
 accuMC <- read.table("YOUR FILE ROUTE HERE", header=T)
 ```
 
+*** NEED EXPLANATION OF FIGURE 2 HERE***
 
 ```{r, fig.cap="Figure 2: Assignment Accuracy Boxplot"}
 #Make assignment accuracy boxplot
@@ -193,7 +192,7 @@ We can also remove low variance loci with the following code (optional). We will
 YourGenepop_rd <- reduce.allele( YourGenepop, p = 0.95) 
 ```
 
-Our dataset has now been reduced. As shown by the output in the console, 81 alleles were removed and 9 loci remain. We wil now run the K-fold test for the genetic data.
+Our dataset has now been reduced. As shown by the output in the console, 81 alleles were removed and 9 loci remain. We wil now run the K-fold test for the genetic data.*** ADD WHAT THIS WILL TELL USE ABOUT *** 
 
 ```{r}
 #Perform K-fold cross-validation 
@@ -205,7 +204,7 @@ assign.kfold(YourGenepop_rd, k.fold=3, train.loci=c(1), loci.sample="fst",
 #loci.sample is telling you to pick a random set of the 33%
 ```
 
-Great! Three assignment tests were completed and now we can visualize it similarly to the morphometric data with a membership probablity plot.
+Great! Three assignment tests were completed and now we can visualize it similarly to the morphometric data with a membership probability plot.
 
 ```{r, fig.cap="Figure 3: Membership Probability Plot"}
 #Make membership probability plot
@@ -213,7 +212,7 @@ membership.plot(dir="genResultFolder_KF/")
 
 #You will be asked whether or not the data included genetic loci, and in this case it does! Type in "Y" for yes into the console.
 
-#Now, you will be prompted to choose an output style just like the morphometric data. We challenge you to run this four times to see all the outputs, but for now just type "3" for the "Seperated by fold" option.
+#Now, you will be prompted to choose an output style just like the morphometric data. We challenge you to run this four times to see all the outputs, but for now just type "3" for the "Separated by fold" option.
 ```
 
 ***WHY DO WE GET AN ERROR FOR THE 4TH OPTION ON THIS??? INCLUDE ALL PLOTS AND EXPLANATIONS***
@@ -226,7 +225,7 @@ assign.MC(YourGenepop_rd, train.inds=c(0.33), train.loci=c(1), loci.sample="fst"
           iterations=3, model="svm", dir="genResultFolder_MC/")
 ```
 
-The Monte-Carlo is done with three assignment tests complete! Simialrly to the morhpometric data, we can calulate the assignment accuracy and plot it!
+The Monte-Carlo is done with three assignment tests complete! Similarly to the morphometric data, we can calulate the assignment accuracy and plot it!
 
 ```{r}
 #Calculate assignment accuracy
@@ -244,11 +243,11 @@ accuracy.plot(gen_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "F
 
 # Identify informative loci.
 
-Identifying important loci is important because if you were using these samples for an actual experiment, it could help you identify loci that might be associated with functional genes. It coud also help to reduce time and cost of preparing samples.
+Identifying informative loci is important because if you were using these samples for an actual experiment, it could help you identify loci that might be associated with functional genes. It coud also help to reduce time and cost of preparing samples.
 
-This is being based off of the Fst values. Fst values, or the fixation index, are a measure of population differentiation due to genetic strucutre. The values ramge from 0 to 1, w 0 meaning the samples are not different, and with 1 being very different and no alleles in common. 
+This identification process is based on the Fst values. Fst values, or the fixation index, are a measure of population differentiation due to genetic structure. The values range from 0 to 1, with 0 meaning the samples are not different, and 1 being very different with no alleles in common. 
 
-Note that this may take a few moments.
+Now we will check the loci. Note that this may take a few moments.
 
 ```{r}
 #The "check.loci" function reads through the training locus files created for the assignment test and counts the frequency of each locus, and puts the results in a text file. 
