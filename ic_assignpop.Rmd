@@ -1,6 +1,6 @@
 ---
-title: "ic_assignpop"
-author: "Ishrat Chowdhury"
+title: "AssignPop Module"
+author: "Ishrat Chowdhury, Ciela Vega, Gianna Grob"
 date: "November 29, 2019"
 output: 
     html_document:
@@ -10,16 +10,26 @@ output:
         theme: united
 ---
 
-#Introduction to module
+# Introduction to the module
 
 Welcome to the AssignPOP module! In this module we will first explain the concept of cross validation. We will walk through a rudementary exaple of it and explain two methods of cross validation. Then we will walk you through using the AssignPop package to do cross validation with non-genetic data and genetic data.
-
 <br><br>
-#Intro to package
+# Introduction to the package
 
 `r AssignPOP` is a module that was created for population assignment using a machine learning framework. `r AssignPOP` uses cross validation methods, Monte Carlo and K-fold to estimate assignment accuracy, and membership probability. 
+
+```{r}
+#Installing and loading the package with another needed package, "klaR".
+
+install.packages("assignPOP")
+library(assignPOP) 
+
+install.packages("klaR")
+library(klaR)
+``` 
+
 <br><br>
-#First, what is cross validation? 
+# First, what is cross validation? 
 
 Cross validation is a way of ensuring that the model being used has accurate predictive power. It does this by creating a holdout sample (a portion of the dataset, also called test set) to set aside. The rest of the data is then "trained" or put through tests compared to the holdout sample. The prediction errors from each of these tests is averaged to determine the ultimate prediction error of the model. 
 <br><br>
@@ -27,9 +37,9 @@ This is useful if the sample size is very small. Instead of taking a sizeable po
 <br><br>
 The debate with cross validation is what portion of the data should the holdout sample be composed off? It is important that this holdout sample is homogeneous and representative of the dataset. To perform this analysis, the K-fold and Monte Carlo cross validation methods can be used.
 <br><br>
-#K-fold 
+# K-fold 
 
-The K-fold method divides the data set into k samples. One of these samples is used as a holdout sample. The rest is then trained. Then the next sample is used as the holdout sample while the remaining is trained. This is done until all the data is trained. This is one of the benefits of k-fold cross validation. it is also very useful for small datasets. However, as a result of this sequential order the holdback samples are all dependent on each other. The Monte Carlo method avoids this.
+The K-fold method divides the data set into "k" samples. One of these samples is used as a holdout sample. The rest is then trained. Then the next sample is used as the holdout sample while the remaining is trained. This is done until all the data is trained. This is one of the benefits of k-fold cross validation. It is also very useful for small datasets. However, as a result of this sequential order the holdback samples are all dependent on each other. The Monte Carlo method avoids this.
 
 
 ```{r, echo=FALSE}
@@ -90,66 +100,104 @@ summary(m_train)
 
 Here we see the R-squared value for the test data is 0.5981 and for the training data it is 0.6424. This is pretty close, but we would have to do this 2 more times with a new test set and then eventually compile all the percent errors to determine the accuracy of the model. This can get really complicated so we will use `r assignPOP` to do the rest.
 <br><br>
-#Monte Carlo 
+# Monte Carlo 
 
 The Monte Carlo method composes the holdback sample by taking random points from the data. This means some points can be repeated, however some may never be selected. It also means that every time this is run there can be sligthly different results. We will also be doing this analysis with `r assignPOP`.
 
 Now let's use `r assignPOP`!
 
 First lets load the packages.
-```{r}
-library(assignPOP)
-library(klaR)
-```
 
 ```{r}
 #Perform K-fold cross-validation 
 assign.kfold(morphdf_pop, k.fold=3, 
              model="svm", dir="morphResultFolder_KF/") 
 
-#k.fold tells the function how many times to split the data; you can list a few numbers here to make it run multiple tests
+#k.fold tells the function how many times to split the data; you can list a few numbers here to make it run multiple tests.
+
+#You will be prompted to say "Y" or "N" to whether or not you want a PCA run on the data. The PCA is optional for the morphometric data, but we recommend running it. You can see what the difference is in your data when you run it without the PCA on your own!
+
+#You will also be prompted to make sure that your headers are correctly assigned as their type of data. For our data, all our columns are integers. Type "Y" if they all say "integer"!
 ```
+
+The K-fold is now done, with three assignment tests conplete! The data has been sent to a folder called "morphResultFolder_KF". We can now visualize our data with a membership probabiltiy plot.
 
 ```{r, fig.cap="Figure 1: Membership Probability Plot"}
 #Make membership probability plot
 membership.plot(dir="morphResultFolder_KF/")
+
+#You will told that only one proportion of training loci is found, which is the morphometric data. You will be prompted to type "Y" or "N" in response to whether there is any genetic data. There is none, so type "N"!
+
+#Next you will have to choose between one of the four output styles. Each is explained in the prompt in your console. We recommend running all four to see the differences in the types of visualization you can have! For now, type "3" for the "Seperated by fold" option.
 ```
+
+***INCLUDE PLOTS, STARTING WITH 4 AND THEN SHOW THE OTHERS. ALSO INCLUDE EXPLANATIONS***
+
+Now we can run the Monte-Carlo for the morhpometric data.
 
 ```{r}
 #Perform Monte-Carlo cross-validation, with using subsets of high Fst loci as training loci, LDA to build predictive models
+
 assign.MC(morphdf_pop, train.inds=c(0.33),
           iterations=3, model="svm", dir="morphResultFolder_MC/")
 
-#train.inds is telling you how to define the holdout sample; can be proportion or integer; an integer tells you how many samples to use in the holdout smaple; a proportion will give you a proportion of samples to put in the holdout sample; listing a few numbers will allow you to make multiple holdout samples
-#iterations tells you have many tests to run
+#train.inds is telling you how to define the holdout sample; can be a proportion or an integer; an integer tells you how many samples to use in the holdout smaple; a proportion will give you a proportion of samples to put in the holdout sample; listing a few numbers will allow you to make multiple holdout samples. 
+
+#EXPLAIN WHY IT IS 0.33 IN THE ABOVE PARAGRAPH!!
+
+#iterations tells you have many tests to run.
+
+#You will be prompted to say "Y" or "N" to whether or not you want a PCA run on the data. The PCA is optional for the morphometric data, but we recommend running it. You can see what the difference is in your data when you run it without the PCA on your own!
+
+#You will also be prompted to make sure that your headers are correctly assigned as their type of data. For our data, all our columns are integers. Type "Y" if they all say "integer"!
 ```
+
+The Monte-Carlo is now done, and three assignment tests have been completed. We can now calculate our assignment accuracy for the test with the following code.
 
 ```{r}
 #Calculate assignment accuracy
+
 morph_accuRes_MC <- accuracy.MC(dir="morphResultFolder_MC/")
 ```
 
+As said in the console, the results of the test were saved as a text file in the directory inside of the "morphResultFlder_MC". We can read this into R using the function "read.table()". Notice that the file has been inputted into the folder and not straight into the directory, since yours might have a unique name. This means you will have to change the name of the "YOUR FILE ROUTE HERE" to match your file's directory route.  
+
+```{r, eval = FALSE}
+accuMC <- read.table("YOUR FILE ROUTE HERE", header=T)
+```
+
+
 ```{r, fig.cap="Figure 2: Assignment Accuracy Boxplot"}
 #Make assignment accuracy boxplot
+
 accuracy.plot(morph_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
+
+#INCLUDE EXPLANATION OF WHAT FIGURE MEANS
 ```
 
-Now lets load our genomic data. This genomic data is the public dataset used to get the ID and population form our madeup morphometric dataset. It is in the GENEPOP format, but you can also import from the STRUCTURE format using the complementary function. The path defined is from the public repository we made for this class. Note that the following code might take a few minutes to run.
+Now let's load our genomic data. This genomic data is the public dataset used to get the ID and population form our made-up morphometric dataset. It is in the GENEPOP format, but you can also import from the STRUCTURE format using the complementary function. The path defined is from the public repository we made for this class. Note that the following code might take a few minutes to run.
 
 ```{r}
-YourGenepop <- read.Genepop( "https://raw.githubusercontent.com/cavega36/AssignPopModule/master/Turtle_data.txt", pop.names=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"), haploid = FALSE)
+#Load in the datatset from GitHub. "pop.names" will set the population names based on the ones in our data. Since turtles are diploid creatures, we will set "haploid" to false.
+
+YourGenepop <- read.Genepop( "https://raw.githubusercontent.com/cavega36/AssignPopModule/master/Turtle_data.txt", pop.names=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"), haploid = FALSE) 
 ```
 
-That looks good! We now have genetic data loaded.
+That looks good! We now have genetic data loaded. The output shows our nine populations with the amount of individuals in them. It also shows us the elements that are included in the data output list, which is just handy information to have.
 <br><br>
-We can also remove low variance loci with the following code (optional).
+We can also remove low variance loci with the following code (optional). We will be using this for the rest of the module though, so please run it!
 
 ```{r}
-YourGenepop_rd <- reduce.allele( YourGenepop, p = 0.95)
+#Reduce low variance within our dataset and create a new matrix for it. The "p" value is set to 0.95, meaning that a locus will be removed from the dataset if its major allele occurs in over 95% of individuals across the populations. This will leave only the data with higher variance, which will make our results more interesting.
+
+YourGenepop_rd <- reduce.allele( YourGenepop, p = 0.95) 
 ```
+
+Our dataset has now been reduced. As shown by the output in the console, 81 alleles were removed and 9 loci remain. We wil now run the K-fold test for the genetic data.
 
 ```{r}
 #Perform K-fold cross-validation 
+
 assign.kfold(YourGenepop_rd, k.fold=3, train.loci=c(1), loci.sample="fst",
              model="svm", dir="genResultFolder_KF/") 
 
@@ -157,10 +205,20 @@ assign.kfold(YourGenepop_rd, k.fold=3, train.loci=c(1), loci.sample="fst",
 #loci.sample is telling you to pick a random set of the 33%
 ```
 
+Great! Three assignment tests were completed and now we can visualize it similarly to the morphometric data with a membership probablity plot.
+
 ```{r, fig.cap="Figure 3: Membership Probability Plot"}
 #Make membership probability plot
 membership.plot(dir="genResultFolder_KF/")
+
+#You will be asked whether or not the data included genetic loci, and in this case it does! Type in "Y" for yes into the console.
+
+#Now, you will be prompted to choose an output style just like the morphometric data. We challenge you to run this four times to see all the outputs, but for now just type "3" for the "Seperated by fold" option.
 ```
+
+***WHY DO WE GET AN ERROR FOR THE 4TH OPTION ON THIS??? INCLUDE ALL PLOTS AND EXPLANATIONS***
+
+Now we can run the Monte-Carlo for the genetic data.
 
 ```{r}
 #Perform Monte-Carlo cross-validation, with using subsets of high Fst loci as training loci, LDA to build predictive models
@@ -168,20 +226,53 @@ assign.MC(YourGenepop_rd, train.inds=c(0.33), train.loci=c(1), loci.sample="fst"
           iterations=3, model="svm", dir="genResultFolder_MC/")
 ```
 
+The Monte-Carlo is done with three assignment tests complete! Simialrly to the morhpometric data, we can calulate the assignment accuracy and plot it!
+
 ```{r}
 #Calculate assignment accuracy
 gen_accuRes_MC <- accuracy.MC(dir="genResultFolder_MC/")
 ```
 
+This time, the results of this test were saved within the "genResultFolder_MC", but the file name is the same. We can now make a plot to represent this data.
+
 ```{r, fig.cap="Figure 4: Assignment Accuracy Boxplot"}
-#Make assignment accuracy boxplot
+#Make assignment accuracy boxplot, making sure to properly assign our populations. 
 accuracy.plot(gen_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
 ```
+
+***EXPLAIN GRAPH HERE* 
+
+# Identify informative loci.
+
+Identifying important loci is important because if you were using these samples for an actual experiment, it could help you identify loci that might be associated with functional genes. It coud also help to reduce time and cost of preparing samples.
+
+This is being based off of the Fst values. Fst values, or the fixation index, are a measure of population differentiation due to genetic strucutre. The values ramge from 0 to 1, w 0 meaning the samples are not different, and with 1 being very different and no alleles in common. 
+
+Note that this may take a few moments.
+
+```{r}
+#The "check.loci" function reads through the training locus files created for the assignment test and counts the frequency of each locus, and puts the results in a text file. 
+
+#The "top.loci" amount is the amount of loci you want to see. 20 loci is the most frequently used hight Fst training loci across the assignment tests.
+
+check.loci(dir="genResultFolder_MC/", top.loci=20)
+
+#You will be prompted to choose which reults you would like to check. The options will be the groups of different proprotions or numbers of training individuals that you specified in "tain.inds" of the Monte-Carlo function earlier. You can also choose "all".
+
+#The ouput of this, (High_Fst_Locus_Freq.txt) includes a list of loci names ordered by their Fst values, with the highest in the top. The number in parentheses after the locus name indicated the number of tests it appeared in. The number in the parentheses after the locus shows how many tests it occured in. 
+```
+
+All done! Now you know how to run both the K-fold Cross Validation and Monte-Carlo tests for both morphometric and genetic data. Thank you for running through this module with us!
+
 <br><br>
 # References
-- Chen, K-Y, Marschall, E.A., Sovic, M.G., Fries, A.C., Gibbs, H.L., Ludsin, S.A. (2018). assignPOP: An R package forpopulation assignment using genetic, non-genetic, or integrated data in a machine-learning framework. Methods in Ecology and Evolution. 9:439–446. https://doi.org/10.1111/2041-210X.12897
-- [Yan Holtz: "Pimp My RMD: a few tips for R Markdown"](https://holtzy.github.io/Pimp-my-rmd/#theme)
-- [Package assignPOP](https://cran.r-project.org/web/packages/assignPOP/assignPOP.pdf)
+
+* [Chen, K-Y, Marschall, E.A., Sovic, M.G., Fries, A.C., Gibbs, H.L., Ludsin, S.A. (2018). assignPOP: An R package forpopulation assignment using genetic, non-genetic, or integrated data in a machine-learning framework. Methods in Ecology and Evolution. 9:439–446.](https://doi.org/10.1111/2041-210X.12897)
+* [Fixtion Index (Fst)](https://nctc.fws.gov/courses/csp/csp3157/content/terms/fst.html)
+* [Package assignPOP](https://cran.r-project.org/web/packages/assignPOP/assignPOP.pdf)
+* [Perez, M., Livoreil, B., Mantovani, S., Boisselier, M. C., Crestanello, B., Abdelkrim, J., ... & Sterijovski, B. (2013). Genetic variation and population structure in the endangered Hermann’s tortoise: the roles of geography and human-mediated processes. Journal of Heredity, 105(1), 70-81.](https://academic.oup.com/jhered/article/105/1/70/857728)
+* [Yan Holtz: "Pimp My RMD: a few tips for R Markdown"](https://holtzy.github.io/Pimp-my-rmd/#theme)
+
 
 
 
