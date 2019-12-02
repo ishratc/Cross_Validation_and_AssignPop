@@ -12,11 +12,11 @@ output:
 
 # Introduction to the module
 
-Welcome to the `r assignPOP` module! In this module we will first explain the concept of cross validation. We will walk through a rudimentary example of it and explain two methods of cross validation. Then we will walk you through using the `r assignPOP` package to do cross validation with non-genetic data and genetic data.
+Welcome to the r assignPOP module! In this module we will first explain the concept of cross validation. We will walk through a rudimentary example of it and explain two methods of cross validation. Then we will walk you through using the r assignPOP package to do cross validation with non-genetic data and genetic data.
 <br><br>
 # Introduction to the package
 
-`r AssignPOP` is a module that was created for population assignment using a machine learning framework. `r AssignPOP` uses cross validation methods, Monte Carlo and K-fold to estimate assignment accuracy, and membership probability. 
+r AssignPOP is a module that was created for population assignment using a machine learning framework. r AssignPOP uses cross validation methods, Monte Carlo and K-fold to estimate assignment accuracy, and membership probability. 
 
 ```{r}
 #Installing and loading the package with another needed package, "klaR".
@@ -96,17 +96,17 @@ m_train<- lm(Height ~ Weight, data=trainData)
 summary(m_train)
 ```
 
-Here we see the R-squared value for the test data is 0.5981 and for the training data it is 0.6424. This is pretty close, but we would have to do this 2 more times with a new test set and then eventually compile all the percent errors to determine the accuracy of the model. This can get really complicated so we will use `r assignPOP` to do the rest.
+Here we see the R-squared value for the test data is 0.5981 and for the training data it is 0.6424. This is pretty close, but we would have to do this 2 more times with a new test set and then eventually compile all the percent errors to determine the accuracy of the model. This can get really complicated so we will use r assignPOP to do the rest.  
 <br><br>
 # Monte Carlo 
 
-The Monte Carlo method composes the holdback sample by taking random points from the data. This means some points can be repeated, however some may never be selected. It also means that every time this is run there can be sligthly different results. We will also be doing this analysis with `r assignPOP`.
+The Monte Carlo method composes the holdback sample by taking random points from the data. This means some points can be repeated, however some may never be selected. It also means that every time this is run there can be sligthly different results. We will also be doing this analysis with r assignPOP.
 
-Now let's use `r assignPOP`!
+Now let's use r assignPOP!
 
 First lets load the packages.
 
-```{r}
+```{r, eval=FALSE}
 #Perform K-fold cross-validation 
 assign.kfold(morphdf_pop, k.fold=3, 
              model="svm", dir="morphResultFolder_KF/") 
@@ -120,7 +120,7 @@ assign.kfold(morphdf_pop, k.fold=3,
 
 The K-fold is now done, with three assignment tests complete! The data has been sent to a folder called "morphResultFolder_KF". We can now visualize our data with a membership probability plot.
 
-```{r, fig.cap="Figure 1: Membership Probability Plot"}
+```{r, fig.cap="Figure 1: Membership Probability Plot", eval=FALSE}
 #Make membership probability plot
 membership.plot(dir="morphResultFolder_KF/")
 
@@ -133,7 +133,7 @@ membership.plot(dir="morphResultFolder_KF/")
 
 Now we can run the Monte-Carlo for the morphometric data.
 
-```{r}
+```{r, eval=FALSE}
 #Perform Monte-Carlo cross-validation, with using subsets of high Fst loci as training loci, LDA to build predictive models
 
 assign.MC(morphdf_pop, train.inds=c(0.33),
@@ -166,7 +166,7 @@ accuMC <- read.table("YOUR FILE ROUTE HERE", header=T)
 
 *** NEED EXPLANATION OF FIGURE 2 HERE***
 
-```{r, fig.cap="Figure 2: Assignment Accuracy Boxplot"}
+```{r, fig.cap="Figure 2: Assignment Accuracy Boxplot", eval=FALSE}
 #Make assignment accuracy boxplot
 
 accuracy.plot(morph_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
@@ -206,7 +206,7 @@ assign.kfold(YourGenepop_rd, k.fold=3, train.loci=c(1), loci.sample="fst",
 
 Great! Three assignment tests were completed and now we can visualize it similarly to the morphometric data with a membership probability plot.
 
-```{r, fig.cap="Figure 3: Membership Probability Plot"}
+```{r, fig.cap="Figure 3: Membership Probability Plot", eval=FALSE}
 #Make membership probability plot
 membership.plot(dir="genResultFolder_KF/")
 
@@ -249,7 +249,7 @@ This identification process is based on the Fst values. Fst values, or the fixat
 
 Now we will check the loci. Note that this may take a few moments.
 
-```{r}
+```{r, eval=FALSE}
 #The "check.loci" function reads through the training locus files created for the assignment test and counts the frequency of each locus, and puts the results in a text file. 
 
 #The "top.loci" amount is the amount of loci you want to see. 20 loci is the most frequently used hight Fst training loci across the assignment tests.
