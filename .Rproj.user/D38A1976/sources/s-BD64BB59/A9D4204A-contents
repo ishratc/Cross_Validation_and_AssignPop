@@ -134,9 +134,12 @@ The K-fold is now done, with three assignment tests complete! The data has been 
 membership.plot(dir="morphResultFolder_KF/")
 ```
 
-***INCLUDE PLOTS, STARTING WITH 4 AND THEN SHOW THE OTHERS. ALSO INCLUDE EXPLANATIONS***
+<center><img src="Figure_1A.png"></center>
+<center><img src="Figure_1B.png"></center>
+<center><img src="Figure_1C.png"></center>
+<center><img src="Figure_1D.png"></center>
 
-Each graph here compiles all the percent errors when comparing all the non-genetic data to each other using 3 folds. It then assigns proportions of each population within each population. In all cases here we see GR, BM, and MAC appear strongly in the GR, BM, MAC, BN, and CROA populations. This suggest that these populations have a lot of mixing of individuals, or they are the same individual. This makes sense since geographically these locations are the closest.
+(Figures 1A, 1B, 1C, 1D) Each graph here compiles all the percent errors when comparing all the non-genetic data to each other using 3 folds. It then assigns proportions of each population within each population. In all cases here we see GR, BM, and MAC appear strongly in the GR, BM, MAC, BN, and CROA populations. This suggest that these populations have a lot of mixing of individuals, or they are the same individual. This makes sense since geographically these locations are the closest.
 
 ## Monte Carlo Morphometric
 Now we can run the Monte-Carlo for the non-genetic data.
@@ -175,7 +178,8 @@ By creating an assignment accuracy boxplot we see that the accuracy for the FR a
 #Make assignment accuracy boxplot
 accuracy.plot(morph_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
 ```
-*** INSERT FIGURE ****
+<center><img src="Figure_2.png"></center>
+*** Explain this figure***
 
 # Using Genomic Data in {assignPOP}
 Now let's load our genomic data. This genomic data is the public dataset used to get the ID and population form our made-up morphometric dataset. It is in the GENEPOP format, but you can also import from the STRUCTURE format using the complementary function. The path defined is from the public repository we made for this class. Note that the following code might take a few minutes to run.
@@ -222,7 +226,11 @@ Great! Three assignment tests were completed and now we can visualize it similar
 membership.plot(dir="genResultFolder_KF/")
 ```
 
-***INCLUDE ALL PLOTS AND EXPLANATIONS***
+<center><img src="Figure_3A.png"></center>
+<center><img src="Figure_3B.png"></center>
+<center><img src="Figure_3C.png"></center>
+
+*** Explanations for 3A-3C***
 
 ## Monte Carlo Genomic
 Now we can run the Monte-Carlo for the genetic data.
@@ -247,7 +255,9 @@ This time, the results of this test were saved within the "genResultFolder_MC", 
 accuracy.plot(gen_accuRes_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
 ```
 
-As before, the FR and GR populations have high accuracy. Due to the large amount of genetic data, the accuracy of some other populations is more than if we only used the non-genetic data. However, it still might be useful to have more iterations. 
+<center><img src="Figure_4.png"></center>
+
+As before, the FR and GR populations have high accuracy. Due to the large amount of genetic data, the accuracy of some other populations is greater than if we only used the non-genetic data. However, it still might be useful to have more iterations. 
 
 ## Identify informative loci
 
@@ -285,6 +295,13 @@ assign.kfold(IntegratedData, k.fold=4, train.loci= 1, loci.sample="fst",
 membership.plot(dir="genResultFolderIntegrated_KF/")
 ```
 
+<center><img src="Figure_5A.png"></center>
+<center><img src="Figure_5B.png"></center>
+<center><img src="Figure_5C.png"></center>
+<center><img src="Figure_5D.png"></center>
+
+*** Explain Figures 5A-5D ***
+
 ## Monte Carlo Integrated Data
 ```{r, eval=FALSE}
 assign.MC(IntegratedData, train.inds=0.6, train.loci=c(1), loci.sample="fst",
@@ -298,8 +315,13 @@ gen_accuRes_Integrated_MC <- accuracy.MC(dir="genResultFolderIntegrated_MC/")
 ```{r, eval=FALSE}
 accuracy.plot(gen_accuRes_Integrated_MC, pop=c("BM", "BN", "ITCS", "SICO", "SP", "CROA", "FR", "GR", "MAC"))
 ```
- 
-All done! Now you know how to run both the K-fold Cross Validation and Monte-Carlo tests for morphometric data, genetic data, and can take an integrated approach to improve accuracy. Thank you for running through this module with us!
+
+<center><img src="Figure_1A.png"></center>
+
+*** Explain Figure 6 ***
+
+# Conclusion
+All done! Now you know how to run both the K-fold Cross Validation and Monte-Carlo tests for morphometric data, genetic data, and can take an integrated approach to improve accuracy all while using the package {assignPOP}. Thank you for running through this module with us!
 
 # References
 
