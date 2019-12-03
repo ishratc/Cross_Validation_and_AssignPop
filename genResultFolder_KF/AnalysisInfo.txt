@@ -1,5 +1,5 @@
  Analysis Description ( R - assignPOP ver. 1.1.7 )
- Perform assign.kfold() @ 2019-12-02 10:18:26 
+ Perform assign.kfold() @ 2019-12-02 17:54:31 
 
  k.fold = 3 
  train.loci = 1 

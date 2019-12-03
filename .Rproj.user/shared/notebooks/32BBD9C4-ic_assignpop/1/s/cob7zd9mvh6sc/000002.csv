@@ -1,4 +1,0 @@
-"0","accuMC <- read.table(""YOUR FILE ROUTE HERE"", header=T)"
-"2","cannot open file 'YOUR FILE ROUTE HERE': No such file or directory"
-"2","Error in file(file, ""rt"") : cannot open the connection
-"
